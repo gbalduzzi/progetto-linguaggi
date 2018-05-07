@@ -3,38 +3,40 @@
  */
 grammar Emmet;
 
-//options{
-//language=Java;
-//}
-//
-//@lexer::header{
-//package myCompiler;
-//}
-//
-//@lexer::members{
-//}
+/**
+*Apportate modifiche, inseriti diversi ? per consentire la terminazione, così sembrerebbe funzionare
+*/
 
-s  : tag_list;                                 /**rimossa non nullità**/   // Lista di tag
+s  : tag_list;               // Lista di tag
 
-tag_list : (tag mult? (TAG_LINKER tag_list)?)?;  /**rimossa non nullità**/
+tag_list : ( tag mult? (TAG_LINKER tag_list)? );
 
 mult : '*' DIGIT+;
 
-tag : TAG attr_list?;
+tag : TAG attr_list;
 
-attr_list : ((SYMBOL FREE_TEXT |  custom  | '{' FREE_TEXT '}' ) attr_list? ) ;
+attr_list : ( (SYMBOL ATTRIBUTE | custom | FREE_TEXT ) attr_list )?;
 
-custom : '[' ATTRIBUTE '=' FREE_TEXT ']'; // Attributo custom
+custom : '[' ATTRIBUTE '=' ATTRIBUTE_FREE_TEXT ']';   // Attributo custom
 
 TAG : 'head' | 'body' | 'p' | 'h' | 'ol' | 'ul' | 'b' | 'i' | 'li' | 'a' | 'div' | 'tit' | 'm';
+
 SYMBOL : '.' | '#' | '$';                   // Simboli che aggiungono attributo al tag
+
 TAG_LINKER : '>' | '+';                     // Simboli che connettono due tag
 
-FREE_TEXT : (LETTER | DIGIT)+;
+/**
+*Da qui in poi ho cambiato l'ordine delle regole, il motivo è che antlr nel dubbio assegna una stringa alla prima regola che matcha
+*ho distinto tra testo libero e testo libero da attributo perchè non si poteva fare distinzione tra i due casi con nessun ordine
+*l'unico modo per risolvere il problema è stato utilizzare "" e {} per racchiudere il testo
+*/
 ATTRIBUTE : LETTER (LETTER | DIGIT)*;
 
-LETTER : ('a'..'z'|'A'..'Z')+;              /**rimossa non nullità, ci deve essere almeno una lettera**/
+ATTRIBUTE_FREE_TEXT : '"' (LETTER | DIGIT)+ '"';
+FREE_TEXT : '{' (LETTER | DIGIT)+ '}' ;
+
+LETTER : ('a'..'z'|'A'..'Z')+;
 DIGIT : [0-9];
 
-WS : [\t\r\n]+ -> skip ;                    // skip spaces, tabs, newlines
+WS : [\t\n\r]+ -> skip ;                    // skip spaces, tabs, newlines
 

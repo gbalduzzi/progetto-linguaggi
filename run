@@ -1,8 +1,18 @@
 #!/bin/bash
+
+#creazione alias per avvio automatico
 alias antlr4='java -jar /usr/local/lib/antlr-4.7.1-complete.jar'
 alias grun='java org.antlr.v4.gui.TestRig'
 
-echo $1
+
+#creazione del lexer e del parser tramite antlr
 antlr4 Emmet.g4
+
+#compilazione dei file java
 javac Emmet*.java
-grun Emmet s -gui < echo $1
+
+#avvio di test per la grammatica
+grun Emmet s -gui
+
+#ora scrivere frasi della grammatica e premere CTRL+D per vedere alberi creati
+
