@@ -9,7 +9,7 @@ grammar Emmet;
 
 s  : tag_list;               // Lista di tag
 
-tag_list : ( tag mult? (TAG_LINKER tag_list)?) ('-' tag_list)?;
+tag_list : tag mult? (TAG_LINKER tag_list)?;
 
 mult : '*' DIGIT+;
 
