@@ -15,13 +15,14 @@ mult : '*' DIGIT+;
 
 tag : TAG attr_list;
 
-attr_list : ( (SYMBOL ATTRIBUTE | custom | FREE_TEXT ) attr_list )?;
+attr_list : ( (SYMBOL ATTRIBUTE | custom | FREE_TEXT | HREF HREFATTRIBUTE) attr_list )?;
 
 custom : '[' ATTRIBUTE '=' ATTRIBUTE_FREE_TEXT ']';   // Attributo custom
 
 TAG : 'head' | 'body' | 'p' | 'h' | 'ol' | 'ul' | 'b' | 'i' | 'li' | 'a' | 'div' | 'tit' | 'm';
 
-SYMBOL : '.' | '#' | '$';                   // Simboli che aggiungono attributo al tag
+SYMBOL : '.' | '#';                   // Simboli che aggiungono attributo al tag
+HREF : '$';
 
 TAG_LINKER : '>' | '+';                     // Simboli che connettono due tag
 
@@ -31,6 +32,7 @@ TAG_LINKER : '>' | '+';                     // Simboli che connettono due tag
 *l'unico modo per risolvere il problema è stato utilizzare "" e {} per racchiudere il testo
 */
 ATTRIBUTE : LETTER (LETTER | DIGIT)*;
+HREFATTRIBUTE : '^' LETTER (LETTER | DIGIT)* '.' LETTER+ '^';
 
 ATTRIBUTE_FREE_TEXT : '"' (LETTER | DIGIT)+ '"';
 FREE_TEXT : '{' (LETTER | DIGIT | ' ')+ '}' ;

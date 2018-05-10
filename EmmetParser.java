@@ -16,8 +16,9 @@ public class EmmetParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, T__3=4, TAG=5, SYMBOL=6, TAG_LINKER=7, ATTRIBUTE=8, 
-		ATTRIBUTE_FREE_TEXT=9, FREE_TEXT=10, LETTER=11, DIGIT=12, WS=13;
+		T__0=1, T__1=2, T__2=3, T__3=4, TAG=5, SYMBOL=6, HREF=7, TAG_LINKER=8, 
+		ATTRIBUTE=9, HREFATTRIBUTE=10, ATTRIBUTE_FREE_TEXT=11, FREE_TEXT=12, LETTER=13, 
+		DIGIT=14, WS=15;
 	public static final int
 		RULE_s = 0, RULE_tag_list = 1, RULE_mult = 2, RULE_tag = 3, RULE_attr_list = 4, 
 		RULE_custom = 5;
@@ -26,11 +27,12 @@ public class EmmetParser extends Parser {
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, "'*'", "'['", "'='", "']'"
+		null, "'*'", "'['", "'='", "']'", null, null, "'$'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
-		null, null, null, null, null, "TAG", "SYMBOL", "TAG_LINKER", "ATTRIBUTE", 
-		"ATTRIBUTE_FREE_TEXT", "FREE_TEXT", "LETTER", "DIGIT", "WS"
+		null, null, null, null, null, "TAG", "SYMBOL", "HREF", "TAG_LINKER", "ATTRIBUTE", 
+		"HREFATTRIBUTE", "ATTRIBUTE_FREE_TEXT", "FREE_TEXT", "LETTER", "DIGIT", 
+		"WS"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -296,6 +298,8 @@ public class EmmetParser extends Parser {
 			return getRuleContext(CustomContext.class,0);
 		}
 		public TerminalNode FREE_TEXT() { return getToken(EmmetParser.FREE_TEXT, 0); }
+		public TerminalNode HREF() { return getToken(EmmetParser.HREF, 0); }
+		public TerminalNode HREFATTRIBUTE() { return getToken(EmmetParser.HREFATTRIBUTE, 0); }
 		public Attr_listContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -317,12 +321,12 @@ public class EmmetParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(38);
+			setState(40);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__1) | (1L << SYMBOL) | (1L << FREE_TEXT))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__1) | (1L << SYMBOL) | (1L << HREF) | (1L << FREE_TEXT))) != 0)) {
 				{
-				setState(35);
+				setState(37);
 				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case SYMBOL:
@@ -345,10 +349,18 @@ public class EmmetParser extends Parser {
 					match(FREE_TEXT);
 					}
 					break;
+				case HREF:
+					{
+					setState(35);
+					match(HREF);
+					setState(36);
+					match(HREFATTRIBUTE);
+					}
+					break;
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(37);
+				setState(39);
 				attr_list();
 				}
 			}
@@ -389,15 +401,15 @@ public class EmmetParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(40);
-			match(T__1);
-			setState(41);
-			match(ATTRIBUTE);
 			setState(42);
-			match(T__2);
+			match(T__1);
 			setState(43);
-			match(ATTRIBUTE_FREE_TEXT);
+			match(ATTRIBUTE);
 			setState(44);
+			match(T__2);
+			setState(45);
+			match(ATTRIBUTE_FREE_TEXT);
+			setState(46);
 			match(T__3);
 			}
 		}
@@ -413,19 +425,20 @@ public class EmmetParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\17\61\4\2\t\2\4\3"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\21\63\4\2\t\2\4\3"+
 		"\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\3\2\3\2\3\3\3\3\5\3\23\n\3\3\3\3"+
 		"\3\5\3\27\n\3\3\4\3\4\6\4\33\n\4\r\4\16\4\34\3\5\3\5\3\5\3\6\3\6\3\6\3"+
-		"\6\5\6&\n\6\3\6\5\6)\n\6\3\7\3\7\3\7\3\7\3\7\3\7\3\7\2\2\b\2\4\6\b\n\f"+
-		"\2\2\2\60\2\16\3\2\2\2\4\20\3\2\2\2\6\30\3\2\2\2\b\36\3\2\2\2\n(\3\2\2"+
-		"\2\f*\3\2\2\2\16\17\5\4\3\2\17\3\3\2\2\2\20\22\5\b\5\2\21\23\5\6\4\2\22"+
-		"\21\3\2\2\2\22\23\3\2\2\2\23\26\3\2\2\2\24\25\7\t\2\2\25\27\5\4\3\2\26"+
-		"\24\3\2\2\2\26\27\3\2\2\2\27\5\3\2\2\2\30\32\7\3\2\2\31\33\7\16\2\2\32"+
-		"\31\3\2\2\2\33\34\3\2\2\2\34\32\3\2\2\2\34\35\3\2\2\2\35\7\3\2\2\2\36"+
-		"\37\7\7\2\2\37 \5\n\6\2 \t\3\2\2\2!\"\7\b\2\2\"&\7\n\2\2#&\5\f\7\2$&\7"+
-		"\f\2\2%!\3\2\2\2%#\3\2\2\2%$\3\2\2\2&\'\3\2\2\2\')\5\n\6\2(%\3\2\2\2("+
-		")\3\2\2\2)\13\3\2\2\2*+\7\4\2\2+,\7\n\2\2,-\7\5\2\2-.\7\13\2\2./\7\6\2"+
-		"\2/\r\3\2\2\2\7\22\26\34%(";
+		"\6\3\6\3\6\5\6(\n\6\3\6\5\6+\n\6\3\7\3\7\3\7\3\7\3\7\3\7\3\7\2\2\b\2\4"+
+		"\6\b\n\f\2\2\2\63\2\16\3\2\2\2\4\20\3\2\2\2\6\30\3\2\2\2\b\36\3\2\2\2"+
+		"\n*\3\2\2\2\f,\3\2\2\2\16\17\5\4\3\2\17\3\3\2\2\2\20\22\5\b\5\2\21\23"+
+		"\5\6\4\2\22\21\3\2\2\2\22\23\3\2\2\2\23\26\3\2\2\2\24\25\7\n\2\2\25\27"+
+		"\5\4\3\2\26\24\3\2\2\2\26\27\3\2\2\2\27\5\3\2\2\2\30\32\7\3\2\2\31\33"+
+		"\7\20\2\2\32\31\3\2\2\2\33\34\3\2\2\2\34\32\3\2\2\2\34\35\3\2\2\2\35\7"+
+		"\3\2\2\2\36\37\7\7\2\2\37 \5\n\6\2 \t\3\2\2\2!\"\7\b\2\2\"(\7\13\2\2#"+
+		"(\5\f\7\2$(\7\16\2\2%&\7\t\2\2&(\7\f\2\2\'!\3\2\2\2\'#\3\2\2\2\'$\3\2"+
+		"\2\2\'%\3\2\2\2()\3\2\2\2)+\5\n\6\2*\'\3\2\2\2*+\3\2\2\2+\13\3\2\2\2,"+
+		"-\7\4\2\2-.\7\13\2\2./\7\5\2\2/\60\7\r\2\2\60\61\7\6\2\2\61\r\3\2\2\2"+
+		"\7\22\26\34\'*";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
