@@ -33,7 +33,7 @@ TAG_LINKER : '>' | '+';                     // Simboli che connettono due tag
 ATTRIBUTE : LETTER (LETTER | DIGIT)*;
 
 ATTRIBUTE_FREE_TEXT : '"' (LETTER | DIGIT)+ '"';
-FREE_TEXT : '{' (LETTER | DIGIT)+ '}' ;
+FREE_TEXT : '{' (LETTER | DIGIT | ' ')+ '}' ;
 
 LETTER : ('a'..'z'|'A'..'Z')+;
 DIGIT : [0-9];
