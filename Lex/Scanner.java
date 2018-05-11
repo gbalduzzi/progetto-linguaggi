@@ -39,8 +39,16 @@ public class Scanner {
         //creazione del parser
         EmmetParser parser = new EmmetParser(tk_stream);
         //chiamata al contesto (alla regola di partenza)
-        parser.s();
-        }
+        parser.s(); //probabilmente andrà specificato il listener
+
+        /**
+         * Il prossimo passo per aggiungere la logica è estendere l'interfaccia EmmetListener
+         * Ciascuno dei suoi metodi (di entrata o uscita) viene chiamato dal parser a tempo debito
+         * Ora dobbiamo estendere questi metodi (2), prevedendo anche le strutture di supporto (alberi) per la nostra applicazione (1)
+         * A lezione è stato detto qualcosa anche a proposito di error list, symbol list e warning list; in modo tale da prevedere una
+         * semplice gestione degli errori (3)
+         */
+    }
 
 
 }
