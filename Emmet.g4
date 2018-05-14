@@ -13,16 +13,17 @@ tag_list : tag mult? (TAG_LINKER tag_list)?;
 
 mult : '*' DIGIT+;
 
-tag : TAG attr_list;
+tag : TAG attr_list?;
 
-attr_list : ( (SYMBOL ATTRIBUTE | custom | FREE_TEXT | HREF HREFATTRIBUTE) attr_list )?;
+attr_list : ( (SYMBOL ATTRIBUTE | custom | FREE_TEXT | HREF HREFATTRIBUTE) attr_list? );
 
 custom : '[' ATTRIBUTE '=' ATTRIBUTE_FREE_TEXT ']';   // Attributo custom
 
-TAG : 'head' | 'body' | 'p' | 'h' | 'ol' | 'ul' | 'b' | 'i' | 'li' | 'a' | 'div' | 'tit' | 'm';
+TAG : 'head' | 'body' | 'link' | 'p' | 'h' | 'ol' | 'ul' | 'b' | 'i' | 'li' | 'a' | 'div' | 'tit' | 'm';
 
 SYMBOL : '.' | '#';                   // Simboli che aggiungono attributo al tag
 HREF : '$';
+URL_SYMBOLS : ':' | '/' | '?' | '&' | '.';
 
 TAG_LINKER : '>' | '+';                     // Simboli che connettono due tag
 
@@ -32,7 +33,7 @@ TAG_LINKER : '>' | '+';                     // Simboli che connettono due tag
 *l'unico modo per risolvere il problema è stato utilizzare "" e {} per racchiudere il testo
 */
 ATTRIBUTE : LETTER (LETTER | DIGIT)*;
-HREFATTRIBUTE : '^' LETTER (LETTER | DIGIT)* '.' LETTER+ '^';
+HREFATTRIBUTE : '^' (LETTER | DIGIT | URL_SYMBOLS)+ '^';
 
 ATTRIBUTE_FREE_TEXT : '"' (LETTER | DIGIT)+ '"';
 FREE_TEXT : '{' (LETTER | DIGIT | ' ')+ '}' ;
