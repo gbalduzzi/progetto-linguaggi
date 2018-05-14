@@ -7,9 +7,11 @@ grammar Emmet;
 *Apportate modifiche, inseriti diversi ? per consentire la terminazione, così sembrerebbe funzionare
 */
 
-s  : tag_list;               // Lista di tag
+s  : tag_list | tag_list2;               // Lista di tag
 
-tag_list : tag mult? (TAG_LINKER tag_list)?;
+tag_list: tag mult? (TAG_LINKER (tag_list | tag_list2) )?;
+
+tag_list2 : '(' tag mult? (TAG_LINKER (tag_list | tag_list2) )? ')' (TAG_LINKER (tag_list | tag_list2) )?;
 
 mult : '*' DIGIT+;
 
