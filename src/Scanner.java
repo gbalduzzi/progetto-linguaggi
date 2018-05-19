@@ -1,5 +1,4 @@
 import java.lang.*;
-
 import org.antlr.v4.runtime.*;
 
 public class Scanner {
@@ -11,7 +10,7 @@ public class Scanner {
         int i = 0;
         //try {
         //creazione input stream
-        ANTLRInputStream in_str = new ANTLRInputStream("p>h.class");
+        CharStream in_str = CharStreams.fromString("p>h.class");
         //istanziazione del lexer generato da antlr
         EmmetLexer lexer = new EmmetLexer(in_str);
 
@@ -35,10 +34,11 @@ public class Scanner {
          * In questo modo, potremo aggiungere la logica estendendo il listener
          */
         //creazione del token stream
-        CommonTokenStream tk_stream = CommonTokenStream(lexer, Token.DEFAULT_CHANNEL);
+        CommonTokenStream tk_stream = new CommonTokenStream(lexer, Token.DEFAULT_CHANNEL);
         //creazione del parser
         EmmetParser parser = new EmmetParser(tk_stream);
-        //chiamata al contesto (alla regola di partenza)
-        parser.eval();
+        // Aggiungo il nostro listener che andremo a modificare
+        parser.addParseListener(new EmmetWorkingListener());
+        EmmetParser.SContext ctx = parser.s();
     }
 }

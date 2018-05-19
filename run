@@ -6,13 +6,13 @@ alias grun='java org.antlr.v4.gui.TestRig'
 
 
 #creazione del lexer e del parser tramite antlr
-antlr4 Emmet.g4
+antlr4 Emmet.g4 -o src
 
 #compilazione dei file java
-javac Emmet*.java
+javac src/Emmet*.java -d bin
 
 #avvio di test per la grammatica
-grun Emmet s -gui
+#grun src/Emmet s -gui
 
 #ora scrivere frasi della grammatica e premere CTRL+D per vedere alberi creati
 
