@@ -1,9 +1,3 @@
 target/generated-sources/*
 
 .idea/*
-Emmet*.java
-Emmet*.class
-EmmetLexer*.*
-EmmetParser*.*
-Emmet.tokens
-Emmet.interp

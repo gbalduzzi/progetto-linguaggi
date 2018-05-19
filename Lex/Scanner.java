@@ -41,6 +41,4 @@ public class Scanner {
         //chiamata al contesto (alla regola di partenza)
         parser.eval();
     }
-
-
 }
