@@ -42,6 +42,7 @@ public class Scanner {
         EmmetWorkingListener ewl = new EmmetWorkingListener();
         parser.addParseListener(ewl);
         ewl.setParser(parser);
+        ewl.setLexer(lexer);
         EmmetParser.SContext ctx = parser.s();
 
     }

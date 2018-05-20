@@ -4,6 +4,7 @@ import java.lang.*;
 
 import org.antlr.v4.*;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -17,9 +18,14 @@ public class EmmetWorkingListener implements EmmetListener {
 
     String output = "";
     private EmmetParser parser = null;
+    private EmmetLexer lexer = null;
 
-    public void setParser(EmmetParser pp) {
-        parser = pp;
+    public void setParser(EmmetParser p) {
+        parser = p;
+    }
+
+    public void setLexer(EmmetLexer l) {
+        lexer = l;
     }
 
     /**
@@ -122,12 +128,21 @@ public class EmmetWorkingListener implements EmmetListener {
      */
     @Override
     public void enterAttr_list(EmmetParser.Attr_listContext ctx) {
+        String tmps = "";
         TokenStream tokens = parser.getTokenStream();
-        String s = "";
-        if (ctx != null)
-            s = tokens.getText();
-        System.out.println(s);
-        System.out.println(ctx.SYMBOL().toString());
+        Token tk = parser.getCurrentToken();
+        System.out.println(tk.getType());
+        if (tk.getType() == 8) {
+            //case SYMBOL
+            parser.consume();
+            if (tk.getText().equals("#")) {
+                //custom attribute case
+            } else if (tk.getText().equals(".")) {
+                //class case
+            }
+        }
+
+
     }
 
     /**
