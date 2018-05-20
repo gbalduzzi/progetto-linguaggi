@@ -20,11 +20,11 @@ public class EmmetWorkingListener implements EmmetListener {
     private EmmetParser parser = null;
     private EmmetLexer lexer = null;
 
-    public void setParser(EmmetParser p) {
+    void setParser(EmmetParser p) {
         parser = p;
     }
 
-    public void setLexer(EmmetLexer l) {
+    void setLexer(EmmetLexer l) {
         lexer = l;
     }
 
@@ -36,7 +36,6 @@ public class EmmetWorkingListener implements EmmetListener {
     @Override
     public void enterS(EmmetParser.SContext ctx) {
         System.out.println("Inizio parsing!");
-        //System.out.println(ctx);
     }
 
     /**
@@ -46,7 +45,7 @@ public class EmmetWorkingListener implements EmmetListener {
      */
     @Override
     public void exitS(EmmetParser.SContext ctx) {
-        System.out.println("Fine parsing, risultato: ");
+        System.out.println("Fine parsing!");
     }
 
     /**
@@ -56,6 +55,7 @@ public class EmmetWorkingListener implements EmmetListener {
      */
     @Override
     public void enterTag_list(EmmetParser.Tag_listContext ctx) {
+        System.out.println("Entro tag list!");
     }
 
     /**
@@ -65,6 +65,7 @@ public class EmmetWorkingListener implements EmmetListener {
      */
     @Override
     public void exitTag_list(EmmetParser.Tag_listContext ctx) {
+        System.out.println("Esco tag list: "+ctx.getText());
     }
 
     /**
@@ -128,26 +129,7 @@ public class EmmetWorkingListener implements EmmetListener {
      */
     @Override
     public void enterAttr_list(EmmetParser.Attr_listContext ctx) {
-        String tmps = "";
-        TokenStream tokens = parser.getTokenStream();
-        Token tks = parser.getCurrentToken();
-        //System.out.println("Child count:\t" + ctx.getChildCount());
-        //System.out.println(tks.getType());
-        if (tks.getType() == 8) {
-            //case SYMBOL
-            //parser.consume();
-            System.out.println("Simbolo:\t" + tks.getText());
-            //questa linea causa un errore, è come se venisse consumato impropriamente un toke, notare errore a console
-            Token tka = tokens.getTokenSource().nextToken();
-            System.out.println("Attributo:\t" + tka.getText());
-            if (tks.getText().equals("#")) {
-                //custom attribute case
-            } else if (tks.getText().equals(".")) {
-                //class case
-            }
-        }
-
-
+        System.out.println("Entro attr list!");
     }
 
     /**
@@ -157,6 +139,7 @@ public class EmmetWorkingListener implements EmmetListener {
      */
     @Override
     public void exitAttr_list(EmmetParser.Attr_listContext ctx) {
+        System.out.println("Esco attr list: "+ctx.getText());
     }
 
     /**
@@ -166,8 +149,6 @@ public class EmmetWorkingListener implements EmmetListener {
      */
     @Override
     public void enterCustom(EmmetParser.CustomContext ctx) {
-		/*System.out.println("Custom");
-		System.out.println(ctx.getText());*/
     }
 
     /**

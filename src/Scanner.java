@@ -39,11 +39,16 @@ public class Scanner {
         //creazione del parser
         EmmetParser parser = new EmmetParser(tk_stream);
         // Aggiungo il nostro listener che andremo a modificare
+        /*
         EmmetWorkingListener ewl = new EmmetWorkingListener();
         parser.addParseListener(ewl);
         ewl.setParser(parser);
         ewl.setLexer(lexer);
-        EmmetParser.SContext ctx = parser.s();
+        EmmetParser.SContext ctx = parser.s(); */
+
+        EmmetWorkingVisitor ewv = new EmmetWorkingVisitor();
+        System.out.println(ewv.visitS(parser.s()));
+
 
     }
 }
