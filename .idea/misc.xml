@@ -3,4 +3,11 @@
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_9" default="false">
     <output url="file://$PROJECT_DIR$/bin" />
   </component>
+  <component name="SuppressABINotification">
+    <option name="modulesWithSuppressedNotConfigured">
+      <set>
+        <option value="Emmet" />
+      </set>
+    </option>
+  </component>
 </project>

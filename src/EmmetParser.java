@@ -1,4 +1,4 @@
-// Generated from /home/gbalduzzi/Code/progetto-linguaggi/Emmet.g4 by ANTLR 4.7
+// Generated from Emmet.g4 by ANTLR 4.7.1
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class EmmetParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.7", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.7.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -102,11 +102,6 @@ public class EmmetParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof EmmetListener ) ((EmmetListener)listener).exitS(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof EmmetVisitor ) return ((EmmetVisitor<? extends T>)visitor).visitS(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final SContext s() throws RecognitionException {
@@ -170,11 +165,6 @@ public class EmmetParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof EmmetListener ) ((EmmetListener)listener).exitTag_list(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof EmmetVisitor ) return ((EmmetVisitor<? extends T>)visitor).visitTag_list(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -272,11 +262,6 @@ public class EmmetParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof EmmetListener ) ((EmmetListener)listener).exitTag_list2(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof EmmetVisitor ) return ((EmmetVisitor<? extends T>)visitor).visitTag_list2(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -389,11 +374,6 @@ public class EmmetParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof EmmetListener ) ((EmmetListener)listener).exitMult(this);
 		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof EmmetVisitor ) return ((EmmetVisitor<? extends T>)visitor).visitMult(this);
-			else return visitor.visitChildren(this);
-		}
 	}
 
 	public final MultContext mult() throws RecognitionException {
@@ -448,11 +428,6 @@ public class EmmetParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof EmmetListener ) ((EmmetListener)listener).exitTag(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof EmmetVisitor ) return ((EmmetVisitor<? extends T>)visitor).visitTag(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -511,11 +486,6 @@ public class EmmetParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof EmmetListener ) ((EmmetListener)listener).exitAttr_list(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof EmmetVisitor ) return ((EmmetVisitor<? extends T>)visitor).visitAttr_list(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -599,11 +569,6 @@ public class EmmetParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof EmmetListener ) ((EmmetListener)listener).exitCustom(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof EmmetVisitor ) return ((EmmetVisitor<? extends T>)visitor).visitCustom(this);
-			else return visitor.visitChildren(this);
 		}
 	}
 
