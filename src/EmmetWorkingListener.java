@@ -130,14 +130,19 @@ public class EmmetWorkingListener implements EmmetListener {
     public void enterAttr_list(EmmetParser.Attr_listContext ctx) {
         String tmps = "";
         TokenStream tokens = parser.getTokenStream();
-        Token tk = parser.getCurrentToken();
-        System.out.println(tk.getType());
-        if (tk.getType() == 8) {
+        Token tks = parser.getCurrentToken();
+        //System.out.println("Child count:\t" + ctx.getChildCount());
+        //System.out.println(tks.getType());
+        if (tks.getType() == 8) {
             //case SYMBOL
-            parser.consume();
-            if (tk.getText().equals("#")) {
+            //parser.consume();
+            System.out.println("Simbolo:\t" + tks.getText());
+            //questa linea causa un errore, è come se venisse consumato impropriamente un toke, notare errore a console
+            Token tka = tokens.getTokenSource().nextToken();
+            System.out.println("Attributo:\t" + tka.getText());
+            if (tks.getText().equals("#")) {
                 //custom attribute case
-            } else if (tk.getText().equals(".")) {
+            } else if (tks.getText().equals(".")) {
                 //class case
             }
         }
