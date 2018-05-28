@@ -64,15 +64,17 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<Void> implemen
      */
     @Override
     public Void visitTag_list(EmmetParser.Tag_listContext ctx) {
-        //aggiungo il tag come figlio rispetto alla situazione corrente
-        //(all'inizio è un figlio immaginario)
+        //salvataggio del livello
+        TreePage copyRef = globalPointer;
+
+        //subito giù di un livello
         TreePage Ttag = new TreePage();
         globalPointer.insertSon(Ttag);
         globalPointer = Ttag;
 
-        //ora inizia la lettura dei dati
+        //ora inizia la lettura del tag
         if (ctx.tag() != null) {
-            //leggo il tag e inizio la lettura dei campi
+            //leggo il nome del tag e dò il via alla visita di lettura dei campi
             Tag t = new Tag();
             t.setName(ctx.tag().getText());
             globalPointer.setTag(t);
@@ -85,13 +87,32 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<Void> implemen
         if (ctx.mult() != null)
             visitMult(ctx.mult());
 
-        //completamento della regola
+        //lettura del tag linker(se c'è) e quindi ricorsione sulla visita di tag list
+        //(NB qui ci sarà da gestire delle eccezioni in futuro)
+        if (ctx.TAG_LINKER() != null) {
+            if (ctx.TAG_LINKER().getText().equals(">")) {
+                //figli del global pointer
+                if (ctx.tag_list() != null)
+                    visitTag_list(ctx.tag_list());
+                if (ctx.tag_list2() != null)
+                    visitTag_list2(ctx.tag_list2());
+            } else {
+                //fratelli del global pointer
+                //vai dal papa prima
+                globalPointer = globalPointer.getParent();
+                if (ctx.tag_list() != null)
+                    visitTag_list(ctx.tag_list());
+                if (ctx.tag_list2() != null)
+                    visitTag_list2(ctx.tag_list2());
+            }
+        }
 
-        //.....
-
+        //riposizionamento alla posizione corretta
+        globalPointer = copyRef;
 
         return null;
         //in questo caso inutile, percorriamo l'albero in base al caso che ricososciamo
+        //(avremmo bisogno di un mix di visitor e listener)
         //return visitChildren(ctx);
     }
 
@@ -103,7 +124,6 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<Void> implemen
      */
     @Override
     public Void visitTag_list2(EmmetParser.Tag_list2Context ctx) {
-        System.out.println("VISITO TAG LIST 2");
         return visitChildren(ctx);
     }
 
@@ -127,7 +147,6 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<Void> implemen
      */
     @Override
     public Void visitTag(EmmetParser.TagContext ctx) {
-        System.out.println("VISITO TAG");
         return visitChildren(ctx);
     }
 
@@ -139,7 +158,8 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<Void> implemen
      */
     @Override
     public Void visitAttr_list(EmmetParser.Attr_listContext ctx) {
-        System.out.println("VISITO ATTRLIST");
+        //attenzione che i metodi di inserimento dei campi restituiscono un booleano da sfruttare
+        //per la corretta gestione delle eccezioni
         return visitChildren(ctx);
     }
 
@@ -159,6 +179,10 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<Void> implemen
 
     }
 
+    /**
+     * Metodo per la creazione della pagina
+     * @return
+     */
     public String buildPage() {
         //costruzione della pagina e ritorno al chiamante
         return TreePage.buildTreeDescription(rootPointer);
