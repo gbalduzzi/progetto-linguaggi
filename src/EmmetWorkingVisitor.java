@@ -66,10 +66,6 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<Void> implemen
         if (ctx.tag() != null) {
             //leggo il nome del tag e dò il via alla visita di lettura dei campi
             visitTag(ctx.tag());
-            //adesso si entra in tag chiamando attr_lst e sfruttando il fatto che il global pointer è fresco
-            if (ctx.tag().attr_list() != null)
-                visitAttr_list(ctx.tag().attr_list());
-            //ok ora ho finito di leggere il tag
         }
         //lettura del multiplier(se c'è)
         if (ctx.mult() != null)
@@ -107,7 +103,10 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<Void> implemen
     //TODO
     @Override
     public Void visitTag_list2(EmmetParser.Tag_list2Context ctx) {
-        return visitChildren(ctx);
+        //attenzione, qui dobbiamo fare due cose:
+        //1 gestire le parentesi correttamente
+        //2 assicurarci che i tag che visitiamo siano quelli della parte della regola di sinistra o di destra
+        return null;
     }
 
     @Override
@@ -121,6 +120,9 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<Void> implemen
         Tag t = new Tag();
         t.setName(ctx.getText());
         globalPointer.setTag(t);
+        //adesso si entra in tag chiamando attr_lst e sfruttando il fatto che il global pointer è fresco
+        if (ctx.attr_list() != null)
+            visitAttr_list(ctx.attr_list());
         return null;
     }
 
