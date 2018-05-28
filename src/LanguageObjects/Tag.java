@@ -7,6 +7,7 @@ public class Tag {
     private static int counter = 0;
 
     private int identifier;
+    private int multiplier;
     private String name = "";
     private String id = "";
     private String classname = "";
@@ -16,6 +17,7 @@ public class Tag {
 
     public Tag() {
         identifier = counter++;
+        multiplier = 1;
         customAttrs = new LinkedList<CustomAttribute>();
     }
 
@@ -78,6 +80,14 @@ public class Tag {
         this.text = text;
     }
 
+    public int getMultiplier() {
+        return multiplier;
+    }
+
+    public void setMultiplier(int multiplier) {
+        this.multiplier = multiplier;
+    }
+
     public void addCustomAttribute(CustomAttribute a) {
         customAttrs.add(a);
     }
@@ -87,23 +97,27 @@ public class Tag {
     }
 
     //TODO
+
     /**
      * Questo metodo restituisce la testa del tag, senza contenuto
      * In questo modo è possibile assemblare tag innestati senza troppa difficoltà
+     *
      * @return
      */
-    public String getHead(){
+    public String getHead() {
         String res = "";
 
         return res;
     }
 
     //TODO
+
     /**
      * Questo metodo restituisce la coda del tag
+     *
      * @return
      */
-    public String getTail(){
+    public String getTail() {
         String res = "";
 
         return res;
@@ -111,9 +125,10 @@ public class Tag {
 
     /**
      * Il metodo serve per restituire il contenuto del tag
+     *
      * @return
      */
-    public String getContent(){
+    public String getContent() {
         return this.getText();
     }
 
