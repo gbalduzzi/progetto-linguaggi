@@ -96,7 +96,7 @@ public class Tag {
         return customAttrs;
     }
 
-    //TODO
+    //TODO qui bisogna implementare tutti i vari casi tenendo anche conto delle eccezioni
 
     /**
      * Questo metodo restituisce la testa del tag, senza contenuto

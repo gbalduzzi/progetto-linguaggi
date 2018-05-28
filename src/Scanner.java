@@ -47,7 +47,10 @@ public class Scanner {
         EmmetParser.SContext ctx = parser.s(); */
 
         EmmetWorkingVisitor ewv = new EmmetWorkingVisitor();
-        System.out.println(ewv.visitS(parser.s()));
+        //invocazione del vistor
+        ewv.visitS(parser.s());
+        //stampa dei risultati
+        System.out.println(ewv.buildPage());
 
 
     }

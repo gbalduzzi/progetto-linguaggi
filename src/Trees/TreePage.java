@@ -41,11 +41,9 @@ public class TreePage {
         this.tag = tag;
     }
 
-    public void insertSon(LanguageObjects.Tag t) {
-        TreePage elem = new TreePage();
-        elem.setTag(t);
-        elem.setParent(this);
-        sons.add(elem);
+    public void insertSon(TreePage t) {
+        t.setParent(this);
+        sons.add(t);
     }
 
     public List<TreePage> getSons() {
@@ -78,17 +76,20 @@ public class TreePage {
                 ) {
             sonsS = sonsS + "\n" + buildTreeDescription(tson);
         }
-        //ricosruzione
-        res = res + tree.getTag().getHead();
-        res = res + "\n" + tree.getTag().getContent();
-        res = res + "\n" + sonsS;
-        res = res + "\n" + tree.getTag().getTail();
-        String resMultiplied = "";
-        int incr = 1;
-        while (!(incr > tree.getTag().getMultiplier())) {
-            resMultiplied = resMultiplied + res + "\n";
-            incr++;
-        }
-        return resMultiplied;
+        //ricosruzione a meno del tag iniziale immaginario
+        if (!tree.getTag().getName().equals("Virtualtag")) {
+            res = res + tree.getTag().getHead();
+            res = res + "\n" + tree.getTag().getContent();
+            res = res + "\n" + sonsS;
+            res = res + "\n" + tree.getTag().getTail();
+            String resMultiplied = "";
+            int incr = 1;
+            while (!(incr > tree.getTag().getMultiplier())) {
+                resMultiplied = resMultiplied + res + "\n";
+                incr++;
+            }
+            return resMultiplied;
+        } else
+            return sonsS;
     }
 }
