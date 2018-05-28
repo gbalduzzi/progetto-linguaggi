@@ -24,12 +24,7 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<Void> implemen
      */
     private TreePage rootPointer = null;
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation returns the result of calling
-     * {@link #visitChildren} on {@code ctx}.</p>
-     */
+
     @Override
     public Void visitS(EmmetParser.SContext ctx) {
         //creazione della struttura e invocazione del parsing
@@ -56,12 +51,7 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<Void> implemen
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation returns the result of calling
-     * {@link #visitChildren} on {@code ctx}.</p>
-     */
+
     @Override
     public Void visitTag_list(EmmetParser.Tag_listContext ctx) {
         //salvataggio del livello
@@ -75,9 +65,7 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<Void> implemen
         //ora inizia la lettura del tag
         if (ctx.tag() != null) {
             //leggo il nome del tag e dò il via alla visita di lettura dei campi
-            Tag t = new Tag();
-            t.setName(ctx.tag().getText());
-            globalPointer.setTag(t);
+            visitTag(ctx.tag());
             //adesso si entra in tag chiamando attr_lst e sfruttando il fatto che il global pointer è fresco
             if (ctx.tag().attr_list() != null)
                 visitAttr_list(ctx.tag().attr_list());
@@ -116,64 +104,72 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<Void> implemen
         //return visitChildren(ctx);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation returns the result of calling
-     * {@link #visitChildren} on {@code ctx}.</p>
-     */
+    //TODO
     @Override
     public Void visitTag_list2(EmmetParser.Tag_list2Context ctx) {
         return visitChildren(ctx);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation returns the result of calling
-     * {@link #visitChildren} on {@code ctx}.</p>
-     */
     @Override
     public Void visitMult(EmmetParser.MultContext ctx) {
         globalPointer.getTag().setMultiplier(Integer.parseInt(ctx.DIGIT().toString()));
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation returns the result of calling
-     * {@link #visitChildren} on {@code ctx}.</p>
-     */
     @Override
     public Void visitTag(EmmetParser.TagContext ctx) {
-        return visitChildren(ctx);
+        Tag t = new Tag();
+        t.setName(ctx.getText());
+        globalPointer.setTag(t);
+        return null;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation returns the result of calling
-     * {@link #visitChildren} on {@code ctx}.</p>
-     */
     @Override
     public Void visitAttr_list(EmmetParser.Attr_listContext ctx) {
         //attenzione che i metodi di inserimento dei campi restituiscono un booleano da sfruttare
         //per la corretta gestione delle eccezioni
-        return visitChildren(ctx);
+
+        if (ctx.SYMBOL() != null) {
+            //lettura del simbolo
+            if (ctx.SYMBOL().getText().equals(".")) {
+                globalPointer.getTag().addClassname(ctx.ATTRIBUTE().getText());
+            } else {
+                if (globalPointer.getTag().setId(ctx.ATTRIBUTE().getText())) {
+                    //do nothing
+                } else
+                    throw new RuntimeException("ID already specified for tag: " + globalPointer.getTag().getName());
+            }
+        }
+        //lettura attributo custom
+        if (ctx.custom() != null) {
+            visitCustom(ctx.custom());
+        }
+        //lettura del teso libero
+        if (ctx.FREE_TEXT() != null) {
+            //ripulito dei terminatori
+            globalPointer.getTag().setText((ctx.FREE_TEXT().getText()).substring(0, ctx.FREE_TEXT().getText().length() - 1));
+        }
+        //riferimento
+        if (ctx.HREF() != null) {
+            boolean b = globalPointer.getTag().setHref((ctx.HREFATTRIBUTE().getText()).substring(0, ctx.HREFATTRIBUTE().getText().length() - 1));
+            if (b) {
+                //do nothing
+            } else
+                throw new RuntimeException("href already specified for tag: " + globalPointer.getTag().getName());
+        }
+        //altri attributi
+        if(ctx.attr_list()!=null)
+            visitAttr_list(ctx.attr_list());
+
+        return null;
+
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation returns the result of calling
-     * {@link #visitChildren} on {@code ctx}.</p>
-     */
     @Override
     public Void visitCustom(EmmetParser.CustomContext ctx) {
         CustomAttribute cat = new CustomAttribute();
         cat.setAname(ctx.ATTRIBUTE().getText());
-        cat.setAcontent(ctx.ATTRIBUTE_FREE_TEXT().getText());
+        cat.setAcontent((ctx.ATTRIBUTE_FREE_TEXT().getText()).substring(0, ctx.ATTRIBUTE_FREE_TEXT().getText().length() - 1));
         globalPointer.getTag().addCustomAttribute(cat);
         return null;
 
@@ -181,6 +177,7 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<Void> implemen
 
     /**
      * Metodo per la creazione della pagina
+     *
      * @return
      */
     public String buildPage() {

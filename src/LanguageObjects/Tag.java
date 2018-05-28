@@ -3,6 +3,8 @@ package LanguageObjects;
 import java.util.LinkedList;
 import java.util.List;
 
+
+//TODO manca un metodo per il processing delle eccezioni che sarebbe da implementare corredato da una error list
 public class Tag {
     private static int counter = 0;
 
@@ -131,5 +133,7 @@ public class Tag {
     public String getContent() {
         return this.getText();
     }
+
+
 
 }
