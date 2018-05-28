@@ -39,24 +39,35 @@ public class Tag {
         return id;
     }
 
-    public void setId(String id) {
+    public boolean setId(String id) {
+        boolean result = true;
+        //il tentativo di inserimento fallisce
+        if (!id.equals(""))
+            return false;
         this.id = id;
+        return result;
     }
 
     public String getClassname() {
         return classname;
     }
 
-    public void setClassname(String classname) {
-        this.classname = classname;
+    public void addClassname(String classname) {
+        //potrebbero esserci piu classi referenziate
+        this.classname = this.classname + " " + classname;
     }
 
     public String getHref() {
         return href;
     }
 
-    public void setHref(String href) {
+    public boolean setHref(String href) {
+        boolean result = true;
+        //il tentativo di inserimento fallisce
+        if (!href.equals(""))
+            return false;
         this.href = href;
+        return result;
     }
 
     public String getText() {
@@ -67,11 +78,43 @@ public class Tag {
         this.text = text;
     }
 
-    public void addCustomAttribute(CustomAttribute a){
+    public void addCustomAttribute(CustomAttribute a) {
         customAttrs.add(a);
     }
 
     public List<CustomAttribute> getCustomAttrs() {
         return customAttrs;
     }
+
+    //TODO
+    /**
+     * Questo metodo restituisce la testa del tag, senza contenuto
+     * In questo modo è possibile assemblare tag innestati senza troppa difficoltà
+     * @return
+     */
+    public String getHead(){
+        String res = "";
+
+        return res;
+    }
+
+    //TODO
+    /**
+     * Questo metodo restituisce la coda del tag
+     * @return
+     */
+    public String getTail(){
+        String res = "";
+
+        return res;
+    }
+
+    /**
+     * Il metodo serve per restituire il contenuto del tag
+     * @return
+     */
+    public String getContent(){
+        return this.getText();
+    }
+
 }
