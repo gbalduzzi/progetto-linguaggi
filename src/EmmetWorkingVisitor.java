@@ -19,7 +19,15 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<String> implem
         System.out.println("Visito s: " + ctx.getText());
         /*System.out.println("Figli di ctx: " + ctx.children.size());
         System.out.println(ctx.tag_list().tag().TAG());*/
-        return visitChildren(ctx);
+        String res = "total result";
+
+        //recursion start
+        if (ctx.tag_list() != null)
+            return visitTag_list(ctx.tag_list());
+        else if (ctx.tag_list2() != null)
+            return visitTag_list2(ctx.tag_list2());
+
+        return res;
     }
 
     /**
@@ -30,6 +38,8 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<String> implem
      */
     @Override
     public String visitTag_list(EmmetParser.Tag_listContext ctx) {
+        System.out.println("VISITO TAG LIST");
+        System.out.println("contenuto: " + ctx.getText());
         return visitChildren(ctx);
     }
 
@@ -41,6 +51,7 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<String> implem
      */
     @Override
     public String visitTag_list2(EmmetParser.Tag_list2Context ctx) {
+        System.out.println("VISITO TAG LIST 2");
         return visitChildren(ctx);
     }
 
@@ -52,6 +63,7 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<String> implem
      */
     @Override
     public String visitMult(EmmetParser.MultContext ctx) {
+        System.out.println("VISITO MULT");
         return visitChildren(ctx);
     }
 
@@ -63,6 +75,7 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<String> implem
      */
     @Override
     public String visitTag(EmmetParser.TagContext ctx) {
+        System.out.println("VISITO TAG");
         return visitChildren(ctx);
     }
 
@@ -74,6 +87,7 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<String> implem
      */
     @Override
     public String visitAttr_list(EmmetParser.Attr_listContext ctx) {
+        System.out.println("VISITO ATTRLIST");
         return visitChildren(ctx);
     }
 
@@ -85,6 +99,6 @@ public class EmmetWorkingVisitor extends AbstractParseTreeVisitor<String> implem
      */
     @Override
     public String visitCustom(EmmetParser.CustomContext ctx) {
-        return " " + ctx.ATTRIBUTE() + "=\"" + ctx.ATTRIBUTE_FREE_TEXT() + "\"";
+        return " " + ctx.ATTRIBUTE() + "=\"" + ctx.ATTRIBUTE_FREE_TEXT().getText() + "\"";
     }
 }
