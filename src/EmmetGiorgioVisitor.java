@@ -117,8 +117,23 @@ public class EmmetGiorgioVisitor extends AbstractParseTreeVisitor<String> implem
         // caso base
         String returnString = openTag + closeTag;
 
+        int n = 1;
+        if (mult != null) {
+            int size =mult.DIGIT().size();
+            StringBuilder s = new StringBuilder();
+            for(int i=0; i < size; i++){
+                s.append(mult.DIGIT(i).getText());
+            }
+
+            n = Integer.parseInt(s.toString());
+            // Ripeto la string n volte
+        }
+
         if (linker != null) {
             if (linker.getSymbol().getText().equals("+")) {
+                // Moltiplico prima di concatenare
+                returnString = new String(new char[n]).replace("\0", returnString);
+
                 // Caso di concatenazione
                 String nextTags = "";
                 tabCounter = tabCounter - 1;
@@ -126,7 +141,7 @@ public class EmmetGiorgioVisitor extends AbstractParseTreeVisitor<String> implem
                 if (list != null) nextTags = visitTag_list(list);
                 if (list2 != null) nextTags = visitTag_list2(list2);
 
-                returnString = openTag + closeTag + nextTags;
+                returnString += nextTags;
 
             } else if (linker.getSymbol().getText().equals(">")) {
                 // Caso di nesting
@@ -137,18 +152,12 @@ public class EmmetGiorgioVisitor extends AbstractParseTreeVisitor<String> implem
                 tabCounter = tabCounter - 1;
 
                 returnString = openTag + "\n" + nextTags + tabSpaces() + closeTag;
-            }
-        }
 
-        if (mult != null) {
-            int size =mult.DIGIT().size();
-            StringBuilder s = new StringBuilder();
-            for(int i=0; i < size; i++){
-                s.append(mult.DIGIT(i).getText());
+                // Moltiplico dopo il nesting
+                returnString = new String(new char[n]).replace("\0", returnString);
             }
-
-            int n = Integer.parseInt(s.toString());
-            // Ripeto la string n volte
+        } else {
+            // Moltiplico
             returnString = new String(new char[n]).replace("\0", returnString);
         }
 
