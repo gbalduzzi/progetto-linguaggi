@@ -21,7 +21,8 @@ public class EmmetGiorgioVisitor extends AbstractParseTreeVisitor<String> implem
 
 	@Override public String visitS(EmmetParser.SContext ctx) {
 	    System.out.println("Inizio parsing!");
-	    if (ctx.tag_list() != null) return visitTag_list(ctx.tag_list());
+        if (ctx.tag_list() != null) return visitTag_list(ctx.tag_list());
+        if (ctx.tag_list2() != null) return visitTag_list2(ctx.tag_list2());
 
 		return "";
 	}

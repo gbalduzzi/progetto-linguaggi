@@ -12,7 +12,7 @@ public class Scanner {
         int i = 0;
         //try {
         //creazione input stream
-        CharStream in_str = CharStreams.fromString("div.class.newClass>p#id#second+b[test=\"prova\"]+(p>div{Pippo}>p)+ul>li*2+a$^google.it^");
+        CharStream in_str = CharStreams.fromString("(head>link$^style.css^)+body>div.header+div.page+div.page");
         System.out.println("Input:\t" + in_str.toString());
         //istanziazione del lexer generato da antlr
         EmmetLexer lexer = new EmmetLexer(in_str);
