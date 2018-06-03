@@ -12,13 +12,14 @@ public class Scanner {
         int i = 0;
         //try {
         //creazione input stream
-        CharStream in_str = CharStreams.fromString("div>m#attribute");
+        CharStream in_str = CharStreams.fromString("div>p+b+(p>div)+ul>li*10");
         System.out.println("Input:\t" + in_str.toString());
         //istanziazione del lexer generato da antlr
         EmmetLexer lexer = new EmmetLexer(in_str);
 
         /**
          La versione 1 del lexer, non si fa altro che iterare (lo lascio per velocizzare)
+         +
         lettura del primo token
             tk = lexer.nextToken();
             while (tk.getType() != Token.EOF) {
@@ -46,11 +47,12 @@ public class Scanner {
         ewl.setLexer(lexer);
         EmmetParser.SContext ctx = parser.s(); */
 
-        EmmetWorkingVisitor ewv = new EmmetWorkingVisitor();
+        //EmmetWorkingVisitor ewv = new EmmetWorkingVisitor();
+        EmmetGiorgioVisitor ewv = new EmmetGiorgioVisitor();
         //invocazione del vistor
-        ewv.visitS(parser.s());
+        String s = ewv.visitS(parser.s());
         //stampa dei risultati
-        System.out.println(ewv.buildPage());
+        System.out.println(s);
 
 
     }
