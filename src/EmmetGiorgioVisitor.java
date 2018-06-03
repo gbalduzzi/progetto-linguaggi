@@ -12,7 +12,12 @@ import java.util.Arrays;
  */
 public class EmmetGiorgioVisitor extends AbstractParseTreeVisitor<String> implements EmmetVisitor<String> {
 
-    int tabCounter = 0;
+    private int tabCounter = 0;
+
+    private String freeText;
+    private String classes;
+    private String ids;
+
 
 	@Override public String visitS(EmmetParser.SContext ctx) {
 	    System.out.println("Inizio parsing!");
@@ -49,23 +54,65 @@ public class EmmetGiorgioVisitor extends AbstractParseTreeVisitor<String> implem
 
 	@Override public String visitTag(EmmetParser.TagContext ctx) {
 	    tabCounter++;
+	    initAttrList();
 	    return tabSpaces() + '<' + ctx.TAG().getText() + visitAttr_list(ctx.attr_list());
 	}
 
 	@Override public String visitAttr_list(EmmetParser.Attr_listContext ctx) {
 	    if (ctx != null) {
-	        // TODO
-	        return ">";
+	        if (ctx.SYMBOL() != null && ctx.SYMBOL().getText().equals(".")) { // Aggiungo classe
+	            if (classes != null)
+	                classes += " " + ctx.ATTRIBUTE().getText();
+	            else
+	                classes = ctx.ATTRIBUTE().getText();
+            }
+
+            if (ctx.SYMBOL() != null && ctx.SYMBOL().getText().equals("#")) { // Aggiungo id
+                if (ids != null)
+                    ids += " " + ctx.ATTRIBUTE().getText();
+                else
+                    ids = ctx.ATTRIBUTE().getText();
+            }
+
+            if (ctx.custom() != null) // Attributo custom
+                return visitCustom(ctx.custom()) + visitAttr_list(ctx.attr_list());
+
+	        if(ctx.FREE_TEXT() != null) { // Free text
+	            freeText = ctx.FREE_TEXT().getText();
+	            freeText = freeText.substring(1, freeText.length()-1);
+            }
+
+            if (ctx.HREF() != null) {
+	            return " href=\""+ctx.HREFATTRIBUTE().getText().replace("^","")+"\"" + visitAttr_list(ctx.attr_list());
+            }
+
+            return visitAttr_list(ctx.attr_list());
+
         } else {
-	        return ">";
+	        // End case: terminata la lista di attributi
+            String classAttribute = (classes != null) ? " class=\""+classes+"\"" : "";
+            String idAttribute = (ids != null) ? " id=\""+ids+"\"" : "";
+            if (freeText != null) {
+                tabCounter++;
+                freeText = "\n"+ tabSpaces() + freeText + "\n";
+                tabCounter--;
+                freeText += tabSpaces();
+            } else {
+                freeText = "";
+            }
+
+	        return classAttribute + idAttribute + ">" + freeText;
         }
+
 	}
 
-	@Override public String visitCustom(EmmetParser.CustomContext ctx) { return visitChildren(ctx); }
+	@Override public String visitCustom(EmmetParser.CustomContext ctx) {
+	    return " " + ctx.ATTRIBUTE().getText() +"=" + ctx.ATTRIBUTE_FREE_TEXT().getText();
+    }
 
 	private String parseTagListElements(EmmetParser.TagContext tag, EmmetParser.MultContext mult, TerminalNode linker, EmmetParser.Tag_listContext list, EmmetParser.Tag_list2Context list2) {
         String openTag = visitTag(tag);
-        String closeTag = tabSpaces() + "</" + tag.TAG().getText() + ">\n";
+        String closeTag = "</" + tag.TAG().getText() + ">\n";
 
         // caso base
         String returnString = openTag + closeTag;
@@ -89,7 +136,7 @@ public class EmmetGiorgioVisitor extends AbstractParseTreeVisitor<String> implem
                 if (list2 != null) nextTags = visitTag_list2(list2);
                 tabCounter = tabCounter - 1;
 
-                returnString = openTag + "\n" + nextTags + closeTag;
+                returnString = openTag + "\n" + nextTags + tabSpaces() + closeTag;
             }
         }
 
@@ -114,5 +161,11 @@ public class EmmetGiorgioVisitor extends AbstractParseTreeVisitor<String> implem
         Arrays.fill(charArray, ' ');
 
         return new String(charArray);
+    }
+
+    private void initAttrList() {
+	    freeText = null;
+	    classes = null;
+	    ids = null;
     }
 }
