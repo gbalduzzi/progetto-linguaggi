@@ -8,32 +8,43 @@ public class Scanner {
     }
 
     public static void main(String[] args) {
-        Token tk;
-        int i = 0;
-        //try {
         //creazione input stream
-        CharStream in_str = CharStreams.fromString("(head>link$^style.css^)+body>div.header+div.page+div.page");
+        CharStream in_str = CharStreams.fromString("div+div>((div>p)+p)>p");
         System.out.println("Input:\t" + in_str.toString());
-        //istanziazione del lexer generato da antlr
-        EmmetLexer lexer = new EmmetLexer(in_str);
 
+        //istanziazione del lexer generato da antlr
+        EmmetLexer lexer = null;
+        try {
+            lexer = new EmmetLexer(in_str);
+            lexer.removeErrorListeners();
+            lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
+        } catch (Exception e) {
+            System.out.print("Lexer error: ");
+            System.out.println(e.getMessage());
+            return;
+        }
 
         //creazione del token stream
         CommonTokenStream tk_stream = new CommonTokenStream(lexer, Token.DEFAULT_CHANNEL);
-        //creazione del parser
-        EmmetParser parser = new EmmetParser(tk_stream);
-        // Aggiungo il nostro listener che andremo a modificare
-        /*
-        EmmetWorkingListener ewl = new EmmetWorkingListener();
-        parser.addParseListener(ewl);
-        ewl.setParser(parser);
-        ewl.setLexer(lexer);
-        EmmetParser.SContext ctx = parser.s(); */
 
-        //EmmetWorkingVisitor ewv = new EmmetWorkingVisitor();
+        //creazione del parser
+        EmmetParser parser = null;
+        parser = new EmmetParser(tk_stream);
+        parser.removeErrorListeners();
+        parser.addErrorListener(ThrowingErrorListener.INSTANCE);
+
+        //creazione del visitor
         EmmetGiorgioVisitor ewv = new EmmetGiorgioVisitor();
         //invocazione del vistor
-        String s = ewv.visitS(parser.s());
+        String s = "";
+        try {
+            s = ewv.visitS(parser.s());
+        } catch (Exception e) {
+            System.out.print("Parser error: ");
+            System.out.println(e.getMessage());
+            return;
+        }
+
         //stampa dei risultati
         System.out.println(s);
 
