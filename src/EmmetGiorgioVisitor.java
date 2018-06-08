@@ -226,12 +226,38 @@ public class EmmetGiorgioVisitor extends AbstractParseTreeVisitor<String> implem
     }
 
     private void exceptionChecker(String n) throws RuntimeException {
-        //controllo comandi che non si possono inserire all'interno di head
         //System.out.println("checked: " + fatherTag + ">" + n);
-        if (fatherTag.equals("head")) {
-            if (!n.equals("meta") && !n.equals("title")) {
-                throw new RuntimeException("Non puoi inserire il tag -" + n + "- all'interno di -" + fatherTag + "-");
-            }
-        }
+
+        //controllo errori per il tag head
+        if (fatherTag.equals("head"))
+            if (!n.equals("meta") && !n.equals("title"))
+                throw new RuntimeException("Non puoi inserire il tag -" + n + "- all'interno del tag -" + fatherTag + "-");
+
+        //controllo errori per il tag body
+        if (fatherTag.equals("body"))
+            if (n.equals("head"))
+                throw new RuntimeException("Non puoi inserire il tag -" + n + "- all'interno del tag -" + fatherTag + "-");
+        if (fatherTag.equals("body"))
+            if (n.equals("meta") || n.equals("title"))
+                throw new RuntimeException("Bad practice inserire il tag -" + n + "- all'interno del tag -" + fatherTag + "-");
+
+        //controllo errori per il tag p e i
+        if (fatherTag.equals("p") || fatherTag.equals("i"))
+            if (!n.equals("i") && !n.equals("b"))
+                throw new RuntimeException("Non puoi inserire il tag -" + n + "- all'interno del tag -" + fatherTag + "- (only phrasing tags allowed)");
+
+        //controllo errori per il tag h1 e meta
+        if (fatherTag.equals("h1") || fatherTag.equals("meta") | fatherTag.equals("title"))
+            throw new RuntimeException("Non puoi inserire tag internamente a -" + fatherTag + "-");
+
+        //controllo errori per il tag ol o ul
+        if (fatherTag.equals("ol") || fatherTag.equals("ul"))
+            if (!n.equals("li"))
+                throw new RuntimeException("Non puoi inserire il tag -" + n + "- all'interno del tag -" + fatherTag + "-");
+
+        //controllo errori per il tag li e a e div
+        if (fatherTag.equals("li") || fatherTag.equals("a") || fatherTag.equals("div"))
+            if (n.equals("head") || n.equals("body") || n.equals("div") || n.equals("title") || n.equals("meta"))
+                throw new RuntimeException("Non puoi inserire il tag -" + n + "- all'interno del tag -" + fatherTag + "-");
     }
 }

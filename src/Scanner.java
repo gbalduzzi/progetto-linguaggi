@@ -9,7 +9,7 @@ public class Scanner {
 
     public static void main(String[] args) {
         //creazione input stream
-        CharStream in_str = CharStreams.fromString("head>tit+h");
+        CharStream in_str = CharStreams.fromString("ul>li>ul>li>b+b)");
         System.out.println("Input:\t" + in_str.toString());
 
         //istanziazione del lexer generato da antlr
