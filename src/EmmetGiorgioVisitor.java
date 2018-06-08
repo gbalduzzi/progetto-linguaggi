@@ -19,6 +19,10 @@ public class EmmetGiorgioVisitor extends AbstractParseTreeVisitor<String> implem
     private String classes;
     private String ids;
 
+    //padre corrente per la gestione delle eccezioni
+    private String fatherTag;
+    private boolean enabler = false;
+
 
     @Override
     public String visitS(EmmetParser.SContext ctx) {
@@ -67,6 +71,8 @@ public class EmmetGiorgioVisitor extends AbstractParseTreeVisitor<String> implem
 
         //espansione del tag, ricostruzione del nome TAG HTML corretto
         String n = expandTag(ctx.TAG().getText().toLowerCase());
+        if (enabler)
+            exceptionChecker(n);
 
         return tabSpaces() + '<' + n + visitAttr_list(ctx.attr_list());
     }
@@ -126,8 +132,10 @@ public class EmmetGiorgioVisitor extends AbstractParseTreeVisitor<String> implem
     }
 
     private String parseTagListElements(EmmetParser.TagContext tag, EmmetParser.MultContext mult, TerminalNode linker, EmmetParser.Tag_listContext list, EmmetParser.Tag_list2Context list2) {
-        String openTag = visitTag(tag);
+
         String ct = expandTag(tag.TAG().getText());
+
+        String openTag = visitTag(tag);
         String closeTag = "</" + ct + ">\n";
 
         // caso base
@@ -155,6 +163,7 @@ public class EmmetGiorgioVisitor extends AbstractParseTreeVisitor<String> implem
                 tabCounter = tabCounter - 1;
 
                 if (list != null) nextTags = visitTag_list(list);
+
                 if (list2 != null) nextTags = visitTag_list2(list2);
 
                 returnString += nextTags;
@@ -163,8 +172,20 @@ public class EmmetGiorgioVisitor extends AbstractParseTreeVisitor<String> implem
                 // Caso di nesting
                 String nextTags = "";
 
+                //impostazione del padre corrente
+                fatherTag = ct;
+                enabler = true;
+
                 if (list != null) nextTags = visitTag_list(list);
+
+                //re-impostazione del padre corrente
+                fatherTag = ct;
+
                 if (list2 != null) nextTags = visitTag_list2(list2);
+
+                //re-impostazione del padre corrente
+                fatherTag = ct;
+
                 tabCounter = tabCounter - 1;
 
                 returnString = openTag + "\n" + nextTags + tabSpaces() + closeTag;
@@ -202,5 +223,15 @@ public class EmmetGiorgioVisitor extends AbstractParseTreeVisitor<String> implem
         else if (n.equals("tit"))
             return "title";
         return n;
+    }
+
+    private void exceptionChecker(String n) throws RuntimeException {
+        //controllo comandi che non si possono inserire all'interno di head
+        //System.out.println("checked: " + fatherTag + ">" + n);
+        if (fatherTag.equals("head")) {
+            if (!n.equals("meta") && !n.equals("title")) {
+                throw new RuntimeException("Non puoi inserire il tag -" + n + "- all'interno di -" + fatherTag + "-");
+            }
+        }
     }
 }
