@@ -64,7 +64,11 @@ public class EmmetGiorgioVisitor extends AbstractParseTreeVisitor<String> implem
     public String visitTag(EmmetParser.TagContext ctx) {
         tabCounter++;
         initAttrList();
-        return tabSpaces() + '<' + ctx.TAG().getText() + visitAttr_list(ctx.attr_list());
+
+        //espansione del tag, ricostruzione del nome TAG HTML corretto
+        String n = expandTag(ctx.TAG().getText().toLowerCase());
+
+        return tabSpaces() + '<' + n + visitAttr_list(ctx.attr_list());
     }
 
     @Override
@@ -123,7 +127,8 @@ public class EmmetGiorgioVisitor extends AbstractParseTreeVisitor<String> implem
 
     private String parseTagListElements(EmmetParser.TagContext tag, EmmetParser.MultContext mult, TerminalNode linker, EmmetParser.Tag_listContext list, EmmetParser.Tag_list2Context list2) {
         String openTag = visitTag(tag);
-        String closeTag = "</" + tag.TAG().getText() + ">\n";
+        String ct = expandTag(tag.TAG().getText());
+        String closeTag = "</" + ct + ">\n";
 
         // caso base
         String returnString = openTag + closeTag;
@@ -187,5 +192,15 @@ public class EmmetGiorgioVisitor extends AbstractParseTreeVisitor<String> implem
         freeText = null;
         classes = null;
         ids = null;
+    }
+
+    private String expandTag(String n) {
+        if (n.equals("h"))
+            return "h1";
+        else if (n.equals("m"))
+            return "meta";
+        else if (n.equals("tit"))
+            return "title";
+        return n;
     }
 }
