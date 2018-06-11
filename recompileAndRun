@@ -1,0 +1,9 @@
+#!/bin/bash
+
+javac	-classpath .:./src:/usr/local/lib/antlr-4.7.1-complete.jar -Xlint:unchecked -nowarn -d ./bin/production/Emmet src/Scanner.java
+
+cd bin/production/Emmet
+
+java Scanner $1
+
+cd ../../..

@@ -8,45 +8,56 @@ public class Scanner {
     }
 
     public static void main(String[] args) {
-        //creazione input stream
-        CharStream in_str = CharStreams.fromString("ul>li>ul>li>b+b)");
-        System.out.println("Input:\t" + in_str.toString());
+        //per la lettura della stringa da console
+        String command = "";
+        if (args.length != 0) {
+            for (String ts : args
+                    ) {
+                command = ts;
+                //creazione input stream
+                CharStream in_str = CharStreams.fromString(command);
+                //System.out.println("Input:\t" + in_str.toString());
 
-        //istanziazione del lexer generato da antlr
-        EmmetLexer lexer = null;
-        try {
-            lexer = new EmmetLexer(in_str);
-            lexer.removeErrorListeners();
-            lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
-        } catch (Exception e) {
-            System.out.print("Lexer error: ");
-            System.out.println(e.getMessage());
+                //istanziazione del lexer generato da antlr
+                EmmetLexer lexer = null;
+                try {
+                    lexer = new EmmetLexer(in_str);
+                    lexer.removeErrorListeners();
+                    lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
+                } catch (Exception e) {
+                    System.out.print("Lexer error: ");
+                    System.out.println(e.getMessage());
+                    return;
+                }
+
+                //creazione del token stream
+                CommonTokenStream tk_stream = new CommonTokenStream(lexer, Token.DEFAULT_CHANNEL);
+
+                //creazione del parser
+                EmmetParser parser = null;
+                parser = new EmmetParser(tk_stream);
+                parser.removeErrorListeners();
+                parser.addErrorListener(ThrowingErrorListener.INSTANCE);
+
+                //creazione del visitor
+                EmmetGiorgioVisitor ewv = new EmmetGiorgioVisitor();
+                //invocazione del vistor
+                String s = "";
+                try {
+                    s = ewv.visitS(parser.s());
+                } catch (Exception e) {
+                    System.out.print("Parser error: ");
+                    System.out.println(e.getMessage());
+                    return;
+                }
+
+                //stampa dei risultati
+                System.out.println(s);
+            }
+        } else {
+            System.out.println("No input found");
             return;
         }
-
-        //creazione del token stream
-        CommonTokenStream tk_stream = new CommonTokenStream(lexer, Token.DEFAULT_CHANNEL);
-
-        //creazione del parser
-        EmmetParser parser = null;
-        parser = new EmmetParser(tk_stream);
-        parser.removeErrorListeners();
-        parser.addErrorListener(ThrowingErrorListener.INSTANCE);
-
-        //creazione del visitor
-        EmmetGiorgioVisitor ewv = new EmmetGiorgioVisitor();
-        //invocazione del vistor
-        String s = "";
-        try {
-            s = ewv.visitS(parser.s());
-        } catch (Exception e) {
-            System.out.print("Parser error: ");
-            System.out.println(e.getMessage());
-            return;
-        }
-
-        //stampa dei risultati
-        System.out.println(s);
 
 
     }
