@@ -1,5 +1,4 @@
 import java.lang.*;
-import java.util.Arrays;
 
 import org.antlr.v4.runtime.*;
 
