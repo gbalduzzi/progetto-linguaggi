@@ -4,6 +4,6 @@ javac	-classpath .:./src:/usr/local/lib/antlr-4.7.1-complete.jar -Xlint:unchecke
 
 cd bin/production/Emmet
 
-java Scanner $1
+java Scanner $1 $2
 
 cd ../../..
