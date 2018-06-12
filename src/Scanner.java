@@ -23,7 +23,7 @@ public class Scanner {
         if (args != null && args.length != 0) {
             //controllare verbosity option
             if (args.length > 1) {
-                System.out.println("num param: " + args.length + "param 2:" + args[1]);
+                //System.out.println("num param: " + args.length + "param 2:" + args[1]);
                 if (args[1].equals("verbose"))
                     verbosity = true;
                 else
